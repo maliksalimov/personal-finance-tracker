@@ -11,6 +11,8 @@ import com.maliksalimov.financetrackerapi.entity.enums.Currency;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 import java.time.LocalDate;
@@ -30,6 +32,9 @@ public class RecurringTransaction {
     @Column(nullable = false)
     @NotBlank(message = "Transaction name is required")
     private String name;
+
+    @Column(nullable = false, precision = 19, scale = 4)
+    private BigDecimal amount;
 
     @Column(nullable = false)
     @NotBlank(message = "Transaction description is required")
@@ -94,4 +99,8 @@ public class RecurringTransaction {
 
     @OneToMany(mappedBy = "recurringTransaction", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> generatedTransactions;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
