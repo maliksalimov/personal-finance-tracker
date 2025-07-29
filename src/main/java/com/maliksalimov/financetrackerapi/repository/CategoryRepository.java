@@ -15,8 +15,9 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findByUser(User user);
-    List<Category> findByUserAndIsActiveIsTrue(User user);
+    List<Category> findByUserAndIsActiveTrue(User user);
     List<Category> findByUserIdAndIsActiveTrue(Long userId);
+    Optional<Category> findByIdAndUser(Long id, User user);
 
     List<Category> findByUserAndType(User user, TransactionType type);
     List<Category> findByUserAndTypeAndIsActiveTrue(User user, TransactionType type);

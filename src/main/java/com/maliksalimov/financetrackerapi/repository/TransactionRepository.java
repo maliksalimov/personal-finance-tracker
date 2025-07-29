@@ -25,10 +25,15 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>{
     @Query("SELECT t FROM Transaction t WHERE t.account.user = :user")
     List<Transaction> findByUser(@Param("user") User user);
 
+    @Query("SELECT t FROM Transaction t WHERE t.account.user = :user")
+    List<Transaction> findByAccountUserOrderByTransactionDateDesc(@Param("user") User user);
+
     @Query("SELECT t FROM Transaction t WHERE t.account.user = :user ORDER BY t.transactionDate DESC")
     List<Transaction> findByUserOrderByTransactionDateDesc(@Param("user") User user);
 
     List<Transaction> findByAccountAndType(Account account, TransactionType type);
+
+    List<Transaction> findByAccountAndTransactionDateBetweenAndType(Account account, LocalDate startDate, LocalDate endDate, TransactionType type);
 
     @Query("SELECT t FROM Transaction t WHERE t.account.user = :user AND t.type = :type")
     List<Transaction> findByUserAndType(@Param("user") User user, @Param("type") TransactionType type);
@@ -38,11 +43,16 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>{
     @Query("SELECT t FROM Transaction t WHERE t.account.user = :user AND t.transactionDate BETWEEN :startDate AND :endDate")
     List<Transaction> findByUserAndTransactionDateBetween(@Param("user") User user, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
+    @Query("SELECT t FROM Transaction t WHERE t.account.user = :user AND t.transactionDate BETWEEN :startDate AND :endDate AND t.type = :type")
+    List<Transaction> findByAccountUserAndTransactionDateBetweenAndType(@Param("user") User user, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("type") TransactionType type);
+
     List<Transaction> findByAccountAndAmountBetween(Account account, BigDecimal minAmount, BigDecimal maxAmount);
     List<Transaction> findByAccountAndAmountGreaterThan(Account account, BigDecimal amount);
     List<Transaction> findByAccountAndAmountLessThan(Account account, BigDecimal amount);
 
     List<Transaction> findByCategory(Category category);
+
+    List<Transaction> findByCategoryAndTransactionDateBetween(Category category, LocalDate startDate, LocalDate endDate);
     List<Transaction> findByAccountAndCategory(Account account, Category category);
 
     @Query("SELECT t FROM Transaction t WHERE t.account.user = :user AND t.category = :category")
